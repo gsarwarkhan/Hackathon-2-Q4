@@ -1,0 +1,13 @@
+[project]
+name = "bonsai"
+version = "0.1.0"
+description = "GIAIC Hackathon Project - Built by Khizr for Ghulam Sarwar Khan"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pydantic>=2.0.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
