@@ -6,6 +6,7 @@
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { Plus, Trash2, CheckCircle2, Circle } from "lucide-react";
+import ChatWidget from "@/components/ChatWidget";
 
 export default function Home() {
     const [tasks, setTasks] = useState<any[]>([]);
@@ -29,7 +30,7 @@ export default function Home() {
 
     const handleAddTask = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!newTitle.strip()) return;
+        if (!newTitle.trim()) return;
         try {
             await api.createTask({ title: newTitle });
             setNewTitle("");
@@ -127,6 +128,8 @@ export default function Home() {
                     )}
                 </section>
             </div>
+
+            <ChatWidget onTaskAction={fetchTasks} />
         </main>
     );
 }

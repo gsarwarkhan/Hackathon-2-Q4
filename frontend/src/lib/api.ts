@@ -40,4 +40,14 @@ export const api = {
         if (!res.ok) throw new Error("Failed to delete task");
         return res.json();
     },
+
+    async chat(message: string, history: any[] = []) {
+        const res = await fetch(`${API_BASE_URL}/chat`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message, history }),
+        });
+        if (!res.ok) throw new Error("Failed to get chat response");
+        return res.json();
+    },
 };
