@@ -1,1 +1,12 @@
-streamlit
+fastapi
+uvicorn[standard]
+sqlmodel
+psycopg2-binary
+pydantic-settings
+python-dotenv
+python-multipart
+pyjwt
+passlib[bcrypt]
+openai
+mcp
+httpx
