@@ -5,6 +5,22 @@ build/
 dist/
 wheels/
 *.egg-info
-
-# Virtual environments
 .venv
+
+# Next.js
+frontend/.next/
+frontend/node_modules/
+
+# Python Specific
+backend/__pycache__/
+backend/.venv/
+**/__pycache__/
+*.pyc
+
+# Env
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/

@@ -1,0 +1,11 @@
+To login as the administrator and access the dashboard:
+
+Email: admin@evolution.com
+Password: admin123
+What you can do as Admin:
+
+View Stats: See the total number of visitors, registered users, and tasks stored in the system.
+User Registry: See a list of all signed-up user emails.
+You can change these credentials in the code later by editing line 17 and 18 of 
+app.py
+.
