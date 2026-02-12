@@ -5,8 +5,10 @@ psycopg2-binary
 pydantic-settings
 python-dotenv
 python-multipart
-pyjwt
+python-jose[cryptography]
 passlib[bcrypt]
 openai
 mcp
 httpx
+google-generativeai
+email-validator

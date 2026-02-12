@@ -1,20 +1,46 @@
 "use client";
 
-// [Task]: T-007
-// [From]: specs/features/task-crud.md
-
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
-import { Plus, Trash2, CheckCircle2, Circle } from "lucide-react";
+import { Plus, User as UserIcon, LayoutDashboard, LogOut, ShieldCheck } from "lucide-react";
+import UserGuide from "@/components/UserGuide";
 import ChatWidget from "@/components/ChatWidget";
+import TaskCard from "@/components/TaskCard";
+import { useRouter } from "next/navigation";
+import { Task, User } from "@/types";
 
 export default function Home() {
-    const [tasks, setTasks] = useState<any[]>([]);
+    const [tasks, setTasks] = useState<Task[]>([]);
     const [newTitle, setNewTitle] = useState("");
     const [loading, setLoading] = useState(true);
+    const [userData, setUserData] = useState<User | null>(null);
+    const [mounted, setMounted] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
-        fetchTasks();
+        console.log("HOME: Mount Protocol Initiated");
+        setMounted(true);
+
+        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+        const userStr = typeof window !== "undefined" ? localStorage.getItem("user") : null;
+
+        console.log("HOME: Auth Trace", { token: !!token, user: !!userStr });
+
+        if (!token || !userStr) {
+            console.log("HOME: Redirecting to login...");
+            router.push("/login");
+            return;
+        }
+
+        try {
+            if (userStr) setUserData(JSON.parse(userStr));
+            fetchTasks();
+        } catch (e) {
+            console.error("HOME: State Corruption", e);
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            router.push("/login");
+        }
     }, []);
 
     const fetchTasks = async () => {
@@ -40,9 +66,9 @@ export default function Home() {
         }
     };
 
-    const toggleTask = async (id: string, current: boolean) => {
+    const toggleTask = async (id: string, currentStatus: boolean) => {
         try {
-            await api.updateTask(id, { is_completed: !current });
+            await api.updateTask(id, { is_completed: !currentStatus });
             fetchTasks();
         } catch (err) {
             console.error(err);
@@ -58,75 +84,131 @@ export default function Home() {
         }
     };
 
+    if (!mounted) {
+        return (
+            <main className="min-h-screen flex items-center justify-center bg-[#020617]">
+                <div className="text-white text-[10px] font-black uppercase tracking-[0.5em] animate-pulse">
+                    Synchronizing Strategic Net...
+                </div>
+            </main>
+        );
+    }
+
     return (
-        <main className="min-h-screen bg-slate-50 p-8 text-slate-900">
-            <div className="max-w-4xl mx-auto">
-                <header className="mb-12">
-                    <h1 className="text-4xl font-bold text-indigo-700 mb-2">🌳 Evolution of Todo</h1>
-                    <p className="text-slate-500">Master your tasks with precision.</p>
+        <main className="min-h-screen px-6 py-20 lg:px-24 xl:px-32 selection:bg-indigo-500/30">
+            <div className="max-w-[1400px] mx-auto">
+
+                {/* Cinematic Intro Section */}
+                <header className="relative mb-32 flex flex-col items-center text-center animate-float-glow">
+                    <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 bg-indigo-500/20 rounded-full blur-[120px] -z-10"></div>
+
+                    <div className="inline-flex items-center gap-3 px-6 py-2 ultra-glass rounded-full mb-8 border-indigo-500/20">
+                        <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_#10b981]"></div>
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-300">Operational Excellence v3.0</span>
+                    </div>
+
+                    <h1 className="text-7xl md:text-9xl font-black tracking-tight leading-[0.85] mb-8">
+                        Created by <br />
+                        <span className="aurora-text">Ghulam Sarwar Khan</span>
+                    </h1>
+
+                    <div className="flex flex-wrap justify-center gap-8 text-[11px] font-black uppercase tracking-[0.4em] text-slate-500 py-4">
+                        <span className="hover:text-indigo-400 cursor-default transition-colors">Evolution Todo Agent</span>
+                        <span className="opacity-20">/</span>
+                        <span className="hover:text-emerald-400 cursor-default transition-colors">Strategic Intelligence</span>
+                        <span className="opacity-20">/</span>
+                        <span className="hover:text-blue-400 cursor-default transition-colors">Automated Governance</span>
+                    </div>
+
+                    <p className="max-w-3xl text-xl text-slate-400 font-medium leading-relaxed mt-4">
+                        A state-of-the-art interface for visionary leaders. Harmonize your strategic objectives through neural-link interaction and holographic task orchestration.
+                    </p>
                 </header>
 
-                <section className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-8">
-                    <form onSubmit={handleAddTask} className="flex gap-4">
-                        <input
-                            type="text"
-                            placeholder="Seed a new task..."
-                            className="flex-1 px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                            value={newTitle}
-                            onChange={(e) => setNewTitle(e.target.value)}
-                        />
-                        <button
-                            type="submit"
-                            className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 hover:bg-indigo-700 transition"
-                        >
-                            <Plus size={20} /> Add Task
-                        </button>
-                    </form>
-                </section>
+                {/* Integrated Bento Intelligence Guide */}
+                <div className="mb-32">
+                    <UserGuide />
+                </div>
 
-                <section className="space-y-4">
-                    {loading ? (
-                        <p className="text-center text-slate-400">Growing your forest...</p>
-                    ) : tasks.length === 0 ? (
-                        <div className="text-center py-20 bg-slate-100 rounded-2xl border-2 border-dashed border-slate-200">
-                            <p className="text-slate-400">No tasks found. Time to seed!</p>
-                        </div>
-                    ) : (
-                        tasks.map((task) => (
-                            <div
-                                key={task.id}
-                                className="bg-white p-4 rounded-xl border border-slate-200 flex items-center gap-4 group hover:shadow-md transition"
+                {/* Operations Control Center */}
+                <div className="mb-32 space-y-24">
+                    {/* Neural Input Section */}
+                    <section className="relative max-w-5xl mx-auto">
+                        <div className="absolute inset-0 bg-blue-500/5 blur-[100px] -z-10"></div>
+                        <form onSubmit={handleAddTask} className="ultra-glass p-10 flex flex-col md:flex-row gap-6 border-white/5 bg-white/[0.02]">
+                            <div className="flex-1 relative group">
+                                <Plus className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors" size={24} />
+                                <input
+                                    type="text"
+                                    placeholder="Input your next strategic mandate..."
+                                    className="w-full cinematic-input pl-16 text-lg font-bold"
+                                    value={newTitle}
+                                    onChange={(e) => setNewTitle(e.target.value)}
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                disabled={!newTitle.trim()}
+                                className="cinematic-button"
                             >
-                                <button
-                                    onClick={() => toggleTask(task.id, task.is_completed)}
-                                    className="text-slate-400 hover:text-indigo-600"
-                                >
-                                    {task.is_completed ? (
-                                        <CheckCircle2 className="text-emerald-500" />
-                                    ) : (
-                                        <Circle />
-                                    )}
-                                </button>
-                                <div className="flex-1">
-                                    <h3 className={`font-semibold ${task.is_completed ? "line-through text-slate-400" : "text-slate-700"}`}>
-                                        {task.title}
-                                    </h3>
-                                    {task.priority && (
-                                        <span className="text-xs font-bold text-amber-500 uppercase tracking-wider">
-                                            Priority: {task.priority === 3 ? "High" : task.priority === 2 ? "Medium" : "Low"}
-                                        </span>
-                                    )}
+                                <span className="relative z-10">Integrate mandate</span>
+                            </button>
+                        </form>
+
+                        <div className="flex justify-between items-center mt-8 px-4">
+                            <div className="flex items-center gap-4">
+                                <div className="ultra-glass px-5 py-2 rounded-full border-white/5 flex items-center gap-3">
+                                    <UserIcon size={14} className="text-indigo-400" />
+                                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">{userData?.name}</span>
                                 </div>
+                            </div>
+                            <div className="flex gap-4">
+                                {userData?.role === 'admin' && (
+                                    <button
+                                        onClick={() => router.push("/admin")}
+                                        className="text-[10px] font-black uppercase tracking-widest text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-2"
+                                    >
+                                        <LayoutDashboard size={14} /> Systems Console
+                                    </button>
+                                )}
                                 <button
-                                    onClick={() => deleteTask(task.id)}
-                                    className="opacity-0 group-hover:opacity-100 text-rose-400 hover:text-rose-600 transition"
+                                    onClick={() => {
+                                        api.logout();
+                                        router.push("/login");
+                                    }}
+                                    className="text-[10px] font-black uppercase tracking-widest text-rose-500 hover:text-rose-400 transition-colors flex items-center gap-2"
                                 >
-                                    <Trash2 size={20} />
+                                    <LogOut size={14} /> Termination
                                 </button>
                             </div>
-                        ))
-                    )}
-                </section>
+                        </div>
+                    </section>
+
+                    {/* Holographic Objective Grid */}
+                    <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                        {loading ? (
+                            <div className="col-span-full py-40 flex flex-col items-center gap-8">
+                                <div className="w-16 h-16 border-t-2 border-indigo-500 rounded-full animate-spin"></div>
+                                <h3 className="aurora-text text-sm uppercase tracking-[0.5em]">Synchronizing Neural Net</h3>
+                            </div>
+                        ) : tasks.length === 0 ? (
+                            <div className="col-span-full py-40 ultra-glass text-center border-dashed border-white/10 bg-transparent flex flex-col items-center gap-6">
+                                <ShieldCheck size={48} className="text-slate-800" />
+                                <p className="text-slate-500 text-sm font-black uppercase tracking-[0.3em] italic">No active objectives detected</p>
+                            </div>
+                        ) : (
+                            tasks.map((task, idx) => (
+                                <TaskCard
+                                    key={task.id}
+                                    task={task}
+                                    idx={idx}
+                                    onToggle={toggleTask}
+                                    onDelete={deleteTask}
+                                />
+                            ))
+                        )}
+                    </section>
+                </div>
             </div>
 
             <ChatWidget onTaskAction={fetchTasks} />

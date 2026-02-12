@@ -3,22 +3,177 @@
 @tailwind utilities;
 
 :root {
-    --foreground-rgb: 0, 0, 0;
-    --background-start-rgb: 214, 219, 220;
-    --background-end-rgb: 255, 255, 255;
+    --aurora-1: #6366f1;
+    --aurora-2: #3b82f6;
+    --aurora-3: #10b981;
+    --aurora-4: #a855f7;
+    --bg-deep: #020617;
+    --glass-bg: rgba(255, 255, 255, 0.01);
+    --glass-border: rgba(255, 255, 255, 0.05);
+    --glow-blue: rgba(59, 130, 246, 0.5);
+    --glow-indigo: rgba(99, 102, 241, 0.5);
+    --glow-emerald: rgba(16, 185, 129, 0.5);
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --foreground-rgb: 255, 255, 255;
-        --background-start-rgb: 0, 0, 0;
-        --background-end-rgb: 0, 0, 0;
+@layer base {
+    html {
+        background: #020617;
+        color: #f1f5f9;
+        min-height: 100vh;
+        font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    }
+
+    body {
+        @apply antialiased overflow-x-hidden selection:bg-indigo-500/30;
+        background-color: #020617;
+        color: #f1f5f9;
+        min-height: 100vh;
+        position: relative;
+    }
+
+    /* High-Fidelity Aurora Engine */
+    html::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background:
+            radial-gradient(circle at 15% 15%, var(--aurora-1) 0%, transparent 45%),
+            radial-gradient(circle at 85% 15%, var(--aurora-4) 0%, transparent 45%),
+            radial-gradient(circle at 50% 85%, var(--aurora-2) 0%, transparent 45%),
+            radial-gradient(circle at 80% 80%, var(--aurora-3) 0%, transparent 40%);
+        filter: blur(80px);
+        opacity: 0.18;
+        z-index: -100;
+        pointer-events: none;
+        animation: aurora-shift 25s infinite alternate ease-in-out;
     }
 }
 
-body {
-    color: rgb(var(--foreground-rgb));
-    background: linear-gradient(to bottom,
-            transparent,
-            rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+@layer components {
+    .ultra-glass {
+        @apply bg-black/[0.15] border border-white/5 backdrop-blur-3xl rounded-[2.5rem] transition-all duration-700;
+        box-shadow:
+            0 20px 50px -12px rgba(0, 0, 0, 0.8),
+            inset 0 1px 1px 0 rgba(255, 255, 255, 0.05);
+        position: relative;
+    }
+
+    .ultra-glass::before {
+        content: "";
+        @apply absolute inset-0 rounded-[2.5rem] pointer-events-none;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent);
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        padding: 1px;
+    }
+
+    .ultra-glass:hover {
+        @apply border-white/10 bg-black/[0.2];
+        box-shadow:
+            0 30px 60px -12px rgba(0, 0, 0, 0.9),
+            inset 0 1px 2px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .hologram-card {
+        @apply ultra-glass relative overflow-hidden;
+    }
+
+    .hologram-card::after {
+        content: "";
+        @apply absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none;
+        background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+    }
+
+    .cinematic-button {
+        @apply relative overflow-hidden px-10 py-5 rounded-2xl font-black uppercase tracking-[0.4em] text-xs transition-all duration-500 active:scale-95;
+        background: linear-gradient(135deg, #6366f1, #3b82f6);
+        box-shadow: 0 10px 30px -10px var(--glow-indigo);
+        color: white;
+    }
+
+    .cinematic-button:hover {
+        @apply -translate-y-1.5;
+        box-shadow: 0 15px 40px -10px var(--glow-blue);
+        background: linear-gradient(135deg, #818cf8, #60a5fa);
+    }
+
+    .cinematic-input {
+        @apply bg-black/40 border-2 border-white/5 rounded-2xl px-8 py-5 focus:outline-none focus:border-indigo-500/30 focus:bg-black/60 transition-all duration-500 text-white placeholder:text-slate-600 font-bold;
+    }
+
+    /* Cinematic Utility Classes */
+    .animate-slide-up {
+        animation: slide-up 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .aurora-text {
+        @apply font-black tracking-tighter;
+        background: linear-gradient(135deg, #818cf8, #34d399, #60a5fa);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: #818cf8;
+        filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.4));
+    }
+}
+
+@keyframes slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.98);
+        filter: blur(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+@keyframes aurora-shift {
+    0% {
+        transform: scale(1) translate(0, 0);
+    }
+
+    50% {
+        transform: scale(1.1) translate(2%, 2%);
+    }
+
+    100% {
+        transform: scale(1) translate(-2%, -2%);
+    }
+}
+
+@keyframes float-glow {
+
+    0%,
+    100% {
+        transform: translateY(0);
+        filter: drop-shadow(0 0 5px var(--glow-blue));
+    }
+
+    50% {
+        transform: translateY(-10px);
+        filter: drop-shadow(0 0 20px var(--glow-indigo));
+    }
+}
+
+.animate-float-glow {
+    animation: float-glow 4s infinite ease-in-out;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-black/20;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors border-2 border-transparent bg-clip-content;
 }

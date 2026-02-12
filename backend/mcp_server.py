@@ -3,16 +3,24 @@
 
 import uuid
 from typing import List, Optional
-from mcp.server import Server
+from mcp.server.fastmcp import FastMCP
+from datetime import datetime, timezone
 from sqlmodel import Session, select
-from .models import Task, Priority
+from .models import Task
 from .db import engine
 
-mcp = Server("todo-mcp")
+mcp = FastMCP("todo-mcp")
 
 @mcp.tool()
 def add_todo(user_id: str, title: str, description: Optional[str] = None, priority: int = 2) -> str:
-    """Create a new task."""
+    """Create a new task in the user's todo list.
+    
+    Args:
+        user_id: The unique identifier of the user.
+        title: The title or summary of the task.
+        description: Detailed notes about the task.
+        priority: Task priority level (1: Low, 2: Medium, 3: High). Default is 2.
+    """
     with Session(engine) as session:
         task = Task(
             user_id=user_id,
@@ -27,7 +35,12 @@ def add_todo(user_id: str, title: str, description: Optional[str] = None, priori
 
 @mcp.tool()
 def list_todos(user_id: str, status: str = "all") -> str:
-    """Retrieve tasks with optional status filter (all, pending, completed)."""
+    """Retrieve tasks for a user with an optional status filter.
+    
+    Args:
+        user_id: The unique identifier of the user.
+        status: Filter tasks by 'all', 'pending', or 'completed'.
+    """
     with Session(engine) as session:
         query = select(Task).where(Task.user_id == user_id)
         if status == "completed":
@@ -59,6 +72,7 @@ def complete_todo(user_id: str, todo_id: str) -> str:
             return "Task not found."
         
         task.is_completed = True
+        task.updated_at = datetime.now(timezone.utc)
         session.add(task)
         session.commit()
         return f"Marked task '{task.title}' as complete."
