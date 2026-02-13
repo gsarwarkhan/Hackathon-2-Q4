@@ -104,7 +104,7 @@ export default function Home() {
 
                     <div className="inline-flex items-center gap-3 px-6 py-2 ultra-glass rounded-full mb-8 border-indigo-500/20">
                         <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_#10b981]"></div>
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-300">Operational Excellence v3.0</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-300">Hackathon II - Evolution of Todo</span>
                     </div>
 
                     <h1 className="text-7xl md:text-9xl font-black tracking-tight leading-[0.85] mb-8">
@@ -113,15 +113,15 @@ export default function Home() {
                     </h1>
 
                     <div className="flex flex-wrap justify-center gap-8 text-[11px] font-black uppercase tracking-[0.4em] text-slate-500 py-4">
-                        <span className="hover:text-indigo-400 cursor-default transition-colors">Evolution Todo Agent</span>
+                        <span className="hover:text-indigo-400 cursor-default transition-colors">GIAIC Hackathon Project</span>
                         <span className="opacity-20">/</span>
-                        <span className="hover:text-emerald-400 cursor-default transition-colors">Strategic Intelligence</span>
+                        <span className="hover:text-emerald-400 cursor-default transition-colors">Spec-Driven Development</span>
                         <span className="opacity-20">/</span>
-                        <span className="hover:text-blue-400 cursor-default transition-colors">Automated Governance</span>
+                        <span className="hover:text-blue-400 cursor-default transition-colors">AI-Native Systems</span>
                     </div>
 
                     <p className="max-w-3xl text-xl text-slate-400 font-medium leading-relaxed mt-4">
-                        A state-of-the-art interface for visionary leaders. Harmonize your strategic objectives through neural-link interaction and holographic task orchestration.
+                        A full-stack, cloud-native todo application built with Next.js, FastAPI, and Kubernetes. Master the art of Spec-Driven Development and AI-Native systems.
                     </p>
                 </header>
 
@@ -140,7 +140,7 @@ export default function Home() {
                                 <Plus className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors" size={24} />
                                 <input
                                     type="text"
-                                    placeholder="Input your next strategic mandate..."
+                                    placeholder="Add a new task to your list..."
                                     className="w-full cinematic-input pl-16 text-lg font-bold"
                                     value={newTitle}
                                     onChange={(e) => setNewTitle(e.target.value)}
@@ -151,7 +151,7 @@ export default function Home() {
                                 disabled={!newTitle.trim()}
                                 className="cinematic-button"
                             >
-                                <span className="relative z-10">Integrate mandate</span>
+                                <span className="relative z-10">Add Task</span>
                             </button>
                         </form>
 
@@ -189,7 +189,7 @@ export default function Home() {
                         {loading ? (
                             <div className="col-span-full py-40 flex flex-col items-center gap-8">
                                 <div className="w-16 h-16 border-t-2 border-indigo-500 rounded-full animate-spin"></div>
-                                <h3 className="aurora-text text-sm uppercase tracking-[0.5em]">Synchronizing Neural Net</h3>
+                                <h3 className="aurora-text text-sm uppercase tracking-[0.5em]">Syncing Data</h3>
                             </div>
                         ) : tasks.length === 0 ? (
                             <div className="col-span-full py-40 ultra-glass text-center border-dashed border-white/10 bg-transparent flex flex-col items-center gap-6">

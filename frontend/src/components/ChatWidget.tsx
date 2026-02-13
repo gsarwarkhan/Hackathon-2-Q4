@@ -111,7 +111,7 @@ function ChatWidget({ onTaskAction }: { onTaskAction: () => void }) {
                         <MessageSquare size={24} className="text-white group-hover:scale-110 transition-transform" />
                         <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border-2 border-indigo-600 animate-pulse"></div>
                     </div>
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white">Neural Uplink</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white">AI Assistant</span>
                 </button>
             ) : (
                 <div className="ultra-glass w-[450px] h-[750px] flex flex-col overflow-hidden animate-slide-up bg-black/40 border-white/5 shadow-[0_20px_80px_rgba(0,0,0,0.8)]">
@@ -122,10 +122,10 @@ function ChatWidget({ onTaskAction }: { onTaskAction: () => void }) {
                                 <div className="absolute inset-0 bg-white/10 animate-pulse"></div>
                             </div>
                             <div>
-                                <h3 className="font-black text-white text-xl leading-none mb-2 tracking-tight">Intelligence Core</h3>
+                                <h3 className="font-black text-white text-xl leading-none mb-2 tracking-tight">AI Todo Assistant</h3>
                                 <div className="flex items-center gap-3">
                                     <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                                    <p className="text-[9px] uppercase tracking-[0.3em] text-slate-500 font-black">Strategic Partner Alpha-7</p>
+                                    <p className="text-[9px] uppercase tracking-[0.3em] text-slate-500 font-black">Hackathon Helper v3.0</p>
                                 </div>
                             </div>
                         </div>
@@ -144,7 +144,7 @@ function ChatWidget({ onTaskAction }: { onTaskAction: () => void }) {
                                     <Bot size={48} className="text-white" />
                                 </div>
                                 <p className="text-slate-500 text-sm font-black uppercase tracking-[0.2em] italic max-w-[240px] mx-auto leading-relaxed">
-                                    "Neural Link Established. State your objective, Ghulam."
+                                    "How can I help you with your tasks today, Ghulam?"
                                 </p>
                             </div>
                         )}
@@ -173,7 +173,7 @@ function ChatWidget({ onTaskAction }: { onTaskAction: () => void }) {
                         <div className="flex gap-4">
                             <input
                                 type="text"
-                                placeholder="State your strategic intent..."
+                                placeholder="Type a message..."
                                 className="flex-1 cinematic-input text-sm font-black placeholder:opacity-30"
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
